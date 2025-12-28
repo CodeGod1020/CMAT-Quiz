@@ -1,0 +1,315 @@
+<html>
+<head>
+<title> Cmat-Quiz </title>
+
+<h1> CMAT-QUIZZES </h1>
+
+</head>
+
+<body> 
+<!--
+ <div id ="start-screen">
+	<h2> Welcome to the Quiz </h2>
+	<p> Click Below to Begin </p>
+	<button type="button" onclick="startQuiz()"> Start Quiz </button>
+</div> -->
+
+
+<div id="main-quiz-container" style="display:none">
+	<div id="quiz-area">
+	</div> 
+
+	<button type="button" id="check-btn" onclick="checkAnswer()" style="margin-bottom:10px"> Check Answer </button>
+	<button type="button" id="next-btn" onclick="loadNextQuestion()" style="display:none"> Next Question </button>
+
+	<p id="result-message"> </p>
+	<p id="progress"> </p>
+</div>
+
+<style>
+	body{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: 100vh;
+		margin: 0;
+		padding: 20px;
+		font-size: 20px;
+	}
+	
+	button{
+		font-size: 20px;
+		padding: 15px 30px;
+		cursor: pointer;	
+	}
+	
+	#result-message{
+		min-height: 50px;
+		margin-top: 10px;	
+	}
+	
+	#quiz-area{
+		min-height: 150px;
+		text-align: left;
+		width: 100%;	
+		height: 100%;
+	
+	}
+	
+	#main-quiz-container{
+		width: 350px;
+		height: 350px;
+	}
+		
+	input[type="checkbox"], 
+	input[type="checkbox"],
+  	input[type="radio"] {
+    		transform: scale(1.5);
+    		margin: 10px;
+    	}
+    	
+</style>
+
+
+
+
+<script>
+
+const quizData = [
+    {
+        question: "Who had an explosive idea and first patented DYNAMITE?",
+        options: ["J. R. Gluber", "Nobel", "Fawks", "Bickford"],
+        correctAnswer: "Nobel",
+    },
+    {
+        question: "Anglo - Nepal war took place during the region of:",
+        options: ["Loard Cornwallis", "Lord Wellesley", "Lord Hastings", "Warren Hastings"],
+        correctAnswer: "Lord Hastings",
+    },
+    {
+        question: "The first SAARC summit was held in Bangladesh on:",
+        options: ["1- 3 December 1984", "7- 8 December 1985", "10- 12 December 1986", "15- 17 December 1987"],
+        correctAnswer: "7- 8 December 1985",
+    },
+    {
+        question: "The census system began from:",
+        options: ["Netherland", "America", "Russia", "China"],
+        correctAnswer: "America",
+    },
+    {
+        question: "Which of the following Vitamin is essential for blood clotting?",
+        options: ["Vitamin A", "Vitamin B", "Vitamin D", "Vitamin K"],
+        correctAnswer: "Vitamin K",
+    },
+    {
+        question: "When was democracy restored in Nepal?",
+        options: ["April 2005", "April 2006", "April 2004", "April 2007"],
+        correctAnswer: "April 2006",
+    },
+    {
+        question: "Which province lies a famous religious place 'Swargadwari'?",
+        options: ["Karnali", "Lumbini", "Gandaki", "Bagmati"],
+        correctAnswer: "Lumbini",
+    },
+    {
+        question: "The place where bankers meet and settle their mutual claims and accounts is known as:",
+        options: ["Treasury", "Clearing house", "Clearing centre", "Dumping ground"],
+        correctAnswer: "Clearing house",
+    },
+    {
+        question: "Remittance in Nepal is generally included at:",
+        options: ["Gross domestic product", "Gross national product", "Gross disposable income", "None of these"],
+        correctAnswer: "Gross national product",
+    },
+    {
+        question: "Chameliya hydropower project included at:",
+        options: ["Achham", "Taplejung", "Sindhuli", "Darchula"],
+        correctAnswer: "Darchula",
+    },
+    {
+        question: "Who developed the principles of Bureaucracy?",
+        options: ["Elton mayo", "Max weber", "Ivan Pavlov", "Henri Fayol"],
+        correctAnswer: "Max weber",
+    },
+    {
+        question: "When did Prithivi Narayan Shah attack and conquered Kantipur?",
+        options: ["1758", "1768", "1778", "None of these"],
+        correctAnswer: "1768",
+    },
+    {
+        question: "What do you understand by FMCG?",
+        options: ["Forward Marketing Group", "Former Managers of Chaudhary Group", "Fast Moving Consumer Goods", "Feeling Management of Control Group"],
+        correctAnswer: "Fast Moving Consumer Goods",
+    },
+    {
+        question: "The great titanic disaster occurred at:",
+        options: ["1812 AD", "1911 AD", "1912 AD", "1951 AD"],
+        correctAnswer: "1912 AD",
+    },
+    {
+        question: "The greenhouse effect is caused by:",
+        options: ["Greenhouse gases in the lower atmosphere absorbing solar radiation", "Greenhouse gases in the lower atmosphere absorbing radiation from the Earth's surface", "Too much heat in the atmosphere", "Too much sunshine reaching Earth"],
+        correctAnswer: "Greenhouse gases in the lower atmosphere absorbing radiation from the Earth's surface",
+    },
+    {
+        question: "How many rings are there in Olympic flag?",
+        options: ["4", "2", "9", "5"],
+        correctAnswer: "5",
+    },
+    {
+        question: "Which is the oldest highway of Nepal?",
+        options: ["Siddhartha Highway", "Tribhuwan Highway", "Araniko Highway", "Prithivii Highway"],
+        correctAnswer: "Tribhuwan Highway",
+    },
+    {
+        question: "Which of the following is not a Himalayan river?",
+        options: ["Trishuli", "Bagmati", "Kali gandaki", "Koshi"],
+        correctAnswer: "Bagmati",
+    },
+    {
+        question: "Which development plan of Nepal emphasize sustainable development?",
+        options: ["1st", "4th", "8th", "10th"],
+        correctAnswer: "8th",
+    },
+    {
+        question: "The world environment day is celebrated on:",
+        options: ["April 7", "June 5", "August 6", "June 16"],
+        correctAnswer: "June 5",
+    },
+    {
+        question: "What does the term PLC stand for?",
+        options: ["Programmable Lift Computer", "Program List Control", "Programmable Logic Controller", "Piezo Lamp Connector"],
+        correctAnswer: "Programmable Logic Controller",
+    },
+    {
+        question: "Who co-founded Hotmail in 1996 and then sold the company to Microsoft?",
+        options: ["Shawn Fanning", "Ada Byron Lovelace", "Sabeer Bhatia", "Ray Tomlinson"],
+        correctAnswer: "Sabeer Bhatia",
+    },
+    {
+        question: "Which medical tool was developed by Sanctorious in 1612?",
+        options: ["Thermometer", "Blood pressure measurement", "Glucometer", "X-ray"],
+        correctAnswer: "Thermometer",
+    },
+    {
+        question: "Radioactivity is a phenomenon of the spontaneous emission of:",
+        options: ["Protons (alpha particles)", "Elecctrons (beta particles)", "Gamma rays (short wave electromagnetic waves)", "All of the above"],
+        correctAnswer: "All of the above",
+    },
+    {
+        question: "Arrange the following countries based on highest to lowest on happiness index 2022:",
+        options: ["Nepal, Finland, Denmark, Australia", "Finland, Denmark, Australia, Nepal", "Nepal, Denmark, Australia, Finland", "Australia, Denmark, Finland, Nepal"],
+        correctAnswer: "Finland, Denmark, Australia, Nepal",
+    }
+];
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+
+
+
+const startScreen = document.getElementById('start-screen');
+const quizContainer = document.getElementById('main-quiz-container');
+const quizArea = document.getElementById('quiz-area');
+const checkButton = document.getElementById('check-btn');
+const nextButton = document.getElementById('next-btn');
+const result = document.getElementById('result-message');
+const progress = document.getElementById('progress');
+
+
+
+function startQuiz(){
+
+
+	// Hide the Welcome Screen
+	// startScreen.style.display = 'none';
+	
+	// Now Show the main Screen
+	quizContainer.style.display = 'block';
+	
+	// Load the First Question
+	loadQuestion();
+}
+
+function loadQuestion(){
+	if (currentQuestionIndex >= quizData.length){
+		quizArea.innerHTML = `<h2> Quiz Finished! </h2> <p> You scored ${score} out of ${quizData.length}.`;
+		checkButton.style.display = 'none';
+		nextButton.style.display = 'none';
+		return ;	
+	
+	}	
+
+	const currentQ = quizData[currentQuestionIndex];
+	let html = `<h3> ${currentQ.question} </h3> <form id = "questionForm">`; 
+	
+	// Loop through options(adding them)
+	currentQ.options.forEach((option) =>{
+		html += `<input type="radio" name="quizOption" value="${option}"> ${option} <br>`;
+	});
+	 
+	html += `</form>`;
+	quizArea.innerHTML = html;
+	
+	
+	
+
+}
+
+function checkAnswer(){
+	
+
+	const options = document.getElementsByName('quizOption');
+	let selectedValue = '';
+	
+	// Getting the Selected value
+	for (let i=0; i< options.length; i++){
+		if (options[i].checked){
+			selectedValue = options[i].value;	
+			break;
+		}
+	}
+	
+	if (selectedValue === ""){
+		result.innerHTML = `<h3> Don't Play with me. Lock in. Select an option. <h3>`;
+	}
+
+	else if (quizData[currentQuestionIndex].correctAnswer === selectedValue){
+		result.innerHTML = `<h3> Correct. </h3>`;
+		score++;
+		checkButton.style.display = "none";
+		nextButton.style.display = "block";
+		
+	
+	}
+
+	else{
+		result.innerHTML = `<h3> It's Wrong. The correct answer is ${quizData[currentQuestionIndex].correctAnswer} </h3>`;
+		checkButton.style.display = "none";
+		nextButton.style.display = "block";
+	}
+		
+}
+
+function loadNextQuestion(){
+	
+	currentQuestionIndex++;
+	result.innerHTML = "";
+	checkButton.style.display = "block";
+	nextButton.style.display = 'none';
+	
+	loadQuestion();
+
+}
+
+startQuiz();
+
+</script>
+
+
+
+</body>
+
+</html>
+
