@@ -1,0 +1,316 @@
+<html>
+<head>
+<title> Cmat-Quiz </title>
+
+<h1> CMAT-QUIZZES </h1>
+
+</head>
+
+<body> 
+<!--
+ <div id ="start-screen">
+	<h2> Welcome to the Quiz </h2>
+	<p> Click Below to Begin </p>
+	<button type="button" onclick="startQuiz()"> Start Quiz </button>
+</div> -->
+
+
+<div id="main-quiz-container" style="display:none">
+	<div id="quiz-area">
+	</div> 
+
+	<button type="button" id="check-btn" onclick="checkAnswer()" style="margin-bottom:10px"> Check Answer </button>
+	<button type="button" id="next-btn" onclick="loadNextQuestion()" style="display:none"> Next Question </button>
+
+	<p id="result-message"> </p>
+	<p id="progress"> </p>
+</div>
+
+<style>
+	body{
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		height: 100vh;
+		margin: 0;
+		padding: 20px;
+		font-size: 20px;
+	}
+	
+	button{
+		font-size: 20px;
+		padding: 15px 30px;
+		cursor: pointer;	
+	}
+	
+	#result-message{
+		min-height: 50px;
+		margin-top: 10px;	
+	}
+	
+	#quiz-area{
+		min-height: 150px;
+		text-align: left;
+		width: 100%;	
+		height: 100%;
+	
+	}
+	
+	#main-quiz-container{
+		width: 350px;
+		height: 350px;
+	}
+		
+	input[type="checkbox"], 
+	input[type="checkbox"],
+  	input[type="radio"] {
+    		transform: scale(1.5);
+    		margin: 10px;
+    	}
+    	
+</style>
+
+
+
+
+<script>
+
+const quizData = [
+
+  {
+    question: "For galvanizing iron which of the following metals is used?",
+    options: ["Aluminum", "Copper", "Lead", "Zinc"],
+    correctAnswer: "Zinc"
+  },
+  {
+    question: "The Great Victoria Desert is located in",
+    options: ["Canada", "West Africa", "Australia", "North America"],
+    correctAnswer: "Australia"
+  },
+  {
+    question: "Brass gets discolored in air because of the presence of which of the following gases in air?",
+    options: ["Oxygen", "Hydrogen Sulphide", "Carbon Dioxide", "Nitrogen"],
+    correctAnswer: "Hydrogen Sulphide"
+  },
+  {
+    question: "The Nobel Prize was first awarded in",
+    options: ["1976", "1958", "1901", "1972"],
+    correctAnswer: "1901"
+  },
+  {
+    question: "When was SAARC founded?",
+    options: ["1982", "1984", "1985", "1983"],
+    correctAnswer: "1985"
+  },
+  {
+    question: "What do we call a collection of two or more computers that are located within a limited distance of each other and that are connected to each other directly or indirectly?",
+    options: ["Internet", "Intranet", "Local Area Network", "Wide Area Network"],
+    correctAnswer: "Local Area Network"
+  },
+  {
+    question: "The headquarters of the World Health Organization is Located at",
+    options: ["Geneva", "Washington DC", "New York", "Rome"],
+    correctAnswer: "Geneva"
+  },
+  {
+    question: "The First woman in Space was",
+    options: ["Valentina Tereshkova", "Sally Ride", "Nidia Comaneci", "Tamara Press"],
+    correctAnswer: "Valentina Tereshkova"
+  },
+  {
+    question: "Michael Jackson is a distinguished person in the field of?",
+    options: ["Pop Music", "Journalism", "Sports", "Acting"],
+    correctAnswer: "Pop Music"
+  },
+  {
+    question: "Large transformers, when used for some time, become very hot and are cooled by circulating oil. The heating of the transformer is due to",
+    options: ["the heating effect of current alone", "Hysteresis loss alone", "both the heating effect of current and hysteresis loss", "Intense sunlight at noon"],
+    correctAnswer: "both the heating effect of current and hysteresis loss"
+  },
+  {
+    question: "What Karl Benz Invented?",
+    options: ["Gasoline powered automobile", "Streetcar", "Glider", "Steam Turbine"],
+    correctAnswer: "Gasoline powered automobile"
+  },
+  {
+    question: "Where were wigs first invented?",
+    options: ["Japan", "France", "Egypt", "China"],
+    correctAnswer: "Egypt"
+  },
+  {
+    question: "Mutation is",
+    options: ["A factor responsible for plant growth", "A change which affects the offspring of F2 generation only", "A change that is inherited", "A change which affects the parents"],
+    correctAnswer: "A change that is inherited"
+  },
+  {
+    question: "World Human Rights Day is observed on",
+    options: ["April 8", "December 10", "December 7", "September 5"],
+    correctAnswer: "December 10"
+  },
+  {
+    question: "The term GIGO is related to",
+    options: ["Accuracy", "Automatic", "Flexibility", "Versatility"],
+    correctAnswer: "Accuracy"
+  },
+  {
+    question: "Which is the first Wi-Fi-free district of Nepal?",
+    options: ["Myagdi", "Rukum", "Salyan", "Puthyan"],
+    correctAnswer: "Myagdi"
+  },
+  {
+    question: "What does the '19' in 'COVID-19' refer to?",
+    options: ["There are 19 variants of the coronavirus.", "The coronavirus and the disease it causes were identified in 2019.", "This is the 19th coronavirus pandemic.", "There are 19 symptoms of coronavirus disease."],
+    correctAnswer: "The coronavirus and the disease it causes were identified in 2019."
+  },
+  {
+    question: "An effective hand sanitizer contains at least this percentage of alcohol to kill the coronavirus and other germs.",
+    options: ["40%", "50%", "60%", "80%"],
+    correctAnswer: "60%"
+  },
+  {
+    question: "Which country is the world's top producer of 'Rare earth material'?",
+    options: ["India", "Japan", "China", "USA"],
+    correctAnswer: "China"
+  },
+  {
+    question: "The president of which country Mohamed Abdullahi Farmajo has suspended Prime Minister Mohamed Hussein Robal from office?",
+    options: ["USA", "Maldives", "New Zealand", "Somalia"],
+    correctAnswer: "Somalia"
+  },
+  {
+    question: "How many astrological signs are there in Hindu mythology?",
+    options: ["10", "12", "13", "15"],
+    correctAnswer: "12"
+  },
+  {
+    question: "Trade-offs are required because wants are unlimited and resources are",
+    options: ["Economical", "Unlimited", "Unusable", "Scarce"],
+    correctAnswer: "Scarce"
+  },
+  {
+    question: "Which among the following is not correctly matched pair?",
+    options: ["USA-Baseball", "China-Table Tennis", "Pakistan-Field Hockey", "India-Baseball"],
+    correctAnswer: "India-Baseball"
+  },
+  {
+    question: "Bar codes store information using",
+    options: ["Punch holes", "Symbols", "Magnetized spot", "bits"],
+    correctAnswer: "Symbols"
+  },
+  {
+    question: "What is the capacity of the highly talked upper Tamakoshi Hydropower project?",
+    options: ["600 MW", "456 MW", "426 MW", "400 MW"],
+    correctAnswer: "456 MW"
+  }
+];
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+
+
+
+const startScreen = document.getElementById('start-screen');
+const quizContainer = document.getElementById('main-quiz-container');
+const quizArea = document.getElementById('quiz-area');
+const checkButton = document.getElementById('check-btn');
+const nextButton = document.getElementById('next-btn');
+const result = document.getElementById('result-message');
+const progress = document.getElementById('progress');
+
+
+
+function startQuiz(){
+
+
+	// Hide the Welcome Screen
+	// startScreen.style.display = 'none';
+	
+	// Now Show the main Screen
+	quizContainer.style.display = 'block';
+	
+	// Load the First Question
+	loadQuestion();
+}
+
+function loadQuestion(){
+	if (currentQuestionIndex >= quizData.length){
+		quizArea.innerHTML = `<h2> Quiz Finished! </h2> <p> You scored ${score} out of ${quizData.length}.`;
+		checkButton.style.display = 'none';
+		nextButton.style.display = 'none';
+		return ;	
+	
+	}	
+
+	const currentQ = quizData[currentQuestionIndex];
+	let html = `<h3> ${currentQ.question} </h3> <form id = "questionForm">`; 
+	
+	// Loop through options(adding them)
+	currentQ.options.forEach((option) =>{
+		html += `<input type="radio" name="quizOption" value="${option}"> ${option} <br>`;
+	});
+	 
+	html += `</form>`;
+	quizArea.innerHTML = html;
+	
+	
+	
+
+}
+
+function checkAnswer(){
+	
+
+	const options = document.getElementsByName('quizOption');
+	let selectedValue = '';
+	
+	// Getting the Selected value
+	for (let i=0; i< options.length; i++){
+		if (options[i].checked){
+			selectedValue = options[i].value;	
+			break;
+		}
+	}
+	
+	if (selectedValue === ""){
+		result.innerHTML = `<h3> Don't Play with me. Lock in. Select an option. <h3>`;
+	}
+
+	else if (quizData[currentQuestionIndex].correctAnswer === selectedValue){
+		result.innerHTML = `<h3> Correct. </h3>`;
+		score++;
+		checkButton.style.display = "none";
+		nextButton.style.display = "block";
+		
+	
+	}
+
+	else{
+		result.innerHTML = `<h3> It's Wrong. The correct answer is ${quizData[currentQuestionIndex].correctAnswer} </h3>`;
+		checkButton.style.display = "none";
+		nextButton.style.display = "block";
+	}
+		
+}
+
+function loadNextQuestion(){
+	
+	currentQuestionIndex++;
+	result.innerHTML = "";
+	checkButton.style.display = "block";
+	nextButton.style.display = 'none';
+	
+	loadQuestion();
+
+}
+
+startQuiz();
+
+</script>
+
+
+
+</body>
+
+</html>
+
